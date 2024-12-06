@@ -3,14 +3,15 @@ package types
 import "database/sql"
 
 type TreeInfoPayload struct {
-	PLimit int `json:"plimit"`
+	Ppage     int `json:"Ppage"`
+	PpageSize int `json:"PpageSize"`
 }
 
 type TreeInfoResponse struct {
 	TreeID         int            `json:"tree_id"`
 	CommonName     string         `json:"common_name"`
 	ScientificName string         `json:"scientific_name"`
-	TrunkDiameter  float64        `json:"trunk_diameter"`
+	TrunkDiameter  string         `json:"trunk_diameter"`
 	CanopyWidth    float64        `json:"canopy_width"`
 	Height         float64        `json:"height"`
 	Age            int            `json:"age"`
@@ -18,9 +19,15 @@ type TreeInfoResponse struct {
 	Notes          sql.NullString `json:"notes"`
 }
 
+type PagedTreeResponse struct {
+	Trees      []*TreeInfoResponse `json:"trees"`
+	Page       int                 `json:"page"`
+	TotalPages int                 `json:"totalPages"`
+}
+
 type TreeInfoStore interface {
-	GetTreeInfo(PLimit int) ([]*TreeInfoResponse, error)
-	GetTreeInfoLocation(PLimit int) ([]*TreeInfoLocation, error)
+	GetTreeInfo(Ppage, PpageSize int) ([]*PagedTreeResponse, error)
+	GetTreeInfoLocation(Ppage, PpageSize int) ([]*TreeInfoLocationResponse, error)
 }
 
 type TreeInfoLocation struct {
@@ -29,4 +36,10 @@ type TreeInfoLocation struct {
 	Longitude      float64 `json:"longitude"`
 	CommonName     string  `json:"common_name"`
 	ScientificName string  `json:"scientific_name"`
+}
+
+type TreeInfoLocationResponse struct {
+	Location   []*TreeInfoLocation `json:"location"`
+	Page       int                 `json:"page"`
+	TotalPages int                 `json:"totalPages"`
 }

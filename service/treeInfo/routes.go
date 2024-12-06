@@ -22,7 +22,6 @@ func NewTreeInfo(store *Store) *TreeInfo {
 func (t *TreeInfo) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/treeinfo", t.getTreeInfo).Methods("POST")
 	router.HandleFunc("/treeinfo-location", t.getTreeInfoLocation).Methods("POST")
-	// fmt.Println("%sTreeInfo routes registered", untils.
 	fmt.Println("TreeInfo routes registered")
 }
 
@@ -33,7 +32,7 @@ func (t *TreeInfo) getTreeInfo(w http.ResponseWriter, r *http.Request) {
 		untils.WriteError(w, http.StatusBadRequest, err)
 	}
 
-	data, err := t.store.GetTreeInfo(payload.PLimit)
+	data, err := t.store.GetTreeInfo(payload.Ppage, payload.PpageSize)
 
 	if err != nil {
 		untils.WriteError(w, http.StatusInternalServerError, err)
@@ -50,7 +49,7 @@ func (t *TreeInfo) getTreeInfoLocation(w http.ResponseWriter, r *http.Request) {
 		untils.WriteError(w, http.StatusBadRequest, err)
 	}
 
-	data, err := t.store.GetTreeInfoLocation(payload.PLimit)
+	data, err := t.store.GetTreeInfoLocation(payload.Ppage, payload.PpageSize)
 
 	if err != nil {
 		untils.WriteError(w, http.StatusInternalServerError, err)

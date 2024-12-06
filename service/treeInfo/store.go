@@ -16,8 +16,9 @@ func NewStorage(db *sql.DB) *Store {
 	}
 }
 
-func (s *Store) GetTreeInfo(PLimit int) ([]*types.TreeInfoResponse, error) {
-	rows, err := s.db.Query("CALL GetTreeData(?)", PLimit)
+func (s *Store) GetTreeInfo(Ppage, PpageSize int) ([]*types.PagedTreeResponse, error) {
+	println("Ppage: ", Ppage)
+	rows, err := s.db.Query("CALL GetTreeData(?, ?)", Ppage, PpageSize)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +33,19 @@ func (s *Store) GetTreeInfo(PLimit int) ([]*types.TreeInfoResponse, error) {
 		trees = append(trees, u)
 	}
 
-	return trees, nil
+	row := s.db.QueryRow("CALL GetTreeTotalPages(?)", PpageSize)
+	var totalPages int
+	if err := row.Scan(&totalPages); err != nil {
+		return nil, err
+	}
+
+	response := &types.PagedTreeResponse{
+		Trees:      trees,
+		Page:       Ppage,
+		TotalPages: totalPages,
+	}
+
+	return []*types.PagedTreeResponse{response}, nil
 }
 
 func scanRowTreeInfo(rows *sql.Rows) (*types.TreeInfoResponse, error) {
@@ -55,23 +68,34 @@ func scanRowTreeInfo(rows *sql.Rows) (*types.TreeInfoResponse, error) {
 	return u, nil
 }
 
-func (s *Store) GetTreeInfoLocation(PLimit int) ([]*types.TreeInfoLocation, error) {
-	rows, err := s.db.Query("CALL GetTreeDataLocation(?)", PLimit)
+func (s *Store) GetTreeInfoLocation(Ppage, PLimit int) ([]*types.TreeInfoLocationResponse, error) {
+	rows, err := s.db.Query("CALL GetTreeDataLocation(?, ?)", Ppage, PLimit)
 	if err != nil {
 		return nil, err
 	}
 
 	u := new(types.TreeInfoLocation)
-	var trees []*types.TreeInfoLocation
+	var location []*types.TreeInfoLocation
 	for rows.Next() {
 		u, err = scanRowTreeInfoLocation(rows)
 		if err != nil {
 			return nil, err
 		}
-		trees = append(trees, u)
+		location = append(location, u)
 	}
 
-	return trees, nil
+	row := s.db.QueryRow("CALL GetTreeLocationTotalPages(?)", PLimit)
+	var totalPages int
+	if err := row.Scan(&totalPages); err != nil {
+		return nil, err
+	}
+	response := &types.TreeInfoLocationResponse{
+		Location:   location,
+		Page:       Ppage,
+		TotalPages: totalPages,
+	}
+
+	return []*types.TreeInfoLocationResponse{response}, nil
 }
 
 func scanRowTreeInfoLocation(rows *sql.Rows) (*types.TreeInfoLocation, error) {
