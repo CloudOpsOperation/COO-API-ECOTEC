@@ -113,3 +113,24 @@ func scanRowTreeInfoLocation(rows *sql.Rows) (*types.TreeInfoLocation, error) {
 	}
 	return u, nil
 }
+
+func (s *Store) GetTreeInfoByID(treeID int) (*types.TreeInfoById, error) {
+	row := s.db.QueryRow("CALL GetTreeDataById(?)", treeID)
+	u := new(types.TreeInfoById)
+	err := row.Scan(
+		&u.TreeID,
+		&u.CommonName,
+		&u.ScientificName,
+		&u.TrunkDiameter,
+		&u.CanopyWidth,
+		&u.Height,
+		&u.Age,
+		&u.TreeCondition,
+		&u.Latitude,
+		&u.Longitude,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
+}
