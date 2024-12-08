@@ -119,6 +119,8 @@ func (s *Store) GetTreeInfoByID(treeID int) (*types.TreeInfoById, error) {
 	u := new(types.TreeInfoById)
 	err := row.Scan(
 		&u.TreeID,
+		&u.Latitude,
+		&u.Longitude,
 		&u.CommonName,
 		&u.ScientificName,
 		&u.TrunkDiameter,
@@ -126,8 +128,6 @@ func (s *Store) GetTreeInfoByID(treeID int) (*types.TreeInfoById, error) {
 		&u.Height,
 		&u.Age,
 		&u.TreeCondition,
-		&u.Latitude,
-		&u.Longitude,
 	)
 	if err != nil {
 		return nil, err

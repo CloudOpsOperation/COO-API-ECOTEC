@@ -51,6 +51,8 @@ type TreeInfoLocationResponse struct {
 
 type TreeInfoById struct {
 	TreeID         int     `json:"tree_id"`
+	Latitude       float64 `json:"latitude"`
+	Longitude      float64 `json:"longitude"`
 	CommonName     string  `json:"common_name"`
 	ScientificName string  `json:"scientific_name"`
 	TrunkDiameter  string  `json:"trunk_diameter"`
@@ -58,6 +60,4 @@ type TreeInfoById struct {
 	Height         float64 `json:"height"`
 	Age            int     `json:"age"`
 	TreeCondition  string  `json:"tree_condition"`
-	Latitude       float64 `json:"latitude"`
-	Longitude      float64 `json:"longitude"`
 }
