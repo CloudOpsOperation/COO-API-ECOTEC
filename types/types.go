@@ -33,6 +33,7 @@ type TreeInfoStore interface {
 	GetTreeInfo(Ppage, PpageSize int) ([]*PagedTreeResponse, error)
 	GetTreeInfoLocation(Ppage, PpageSize int) ([]*TreeInfoLocationResponse, error)
 	GetTreeInfoByID(PtreeID int) (*TreeInfoById, error)
+	GetTreeInfoLocationAll() ([]*TreeInfoLocation, error)
 }
 
 type TreeInfoLocation struct {

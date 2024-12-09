@@ -98,6 +98,25 @@ func (s *Store) GetTreeInfoLocation(Ppage, PLimit int) ([]*types.TreeInfoLocatio
 	return []*types.TreeInfoLocationResponse{response}, nil
 }
 
+func (s *Store) GetTreeInfoLocationAll() ([]*types.TreeInfoLocation, error) {
+	rows, err := s.db.Query("CALL GetTreeDataLocationAll()")
+	if err != nil {
+		return nil, err
+	}
+
+	u := new(types.TreeInfoLocation)
+	var location []*types.TreeInfoLocation
+	for rows.Next() {
+		u, err = scanRowTreeInfoLocation(rows)
+		if err != nil {
+			return nil, err
+		}
+		location = append(location, u)
+	}
+
+	return location, nil
+}
+
 func scanRowTreeInfoLocation(rows *sql.Rows) (*types.TreeInfoLocation, error) {
 	u := new(types.TreeInfoLocation)
 

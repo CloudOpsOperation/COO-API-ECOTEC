@@ -22,6 +22,7 @@ func NewTreeInfo(store *Store) *TreeInfo {
 func (t *TreeInfo) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/treeinfo", t.getTreeInfo).Methods("POST")
 	router.HandleFunc("/treeinfo-location", t.getTreeInfoLocation).Methods("POST")
+	router.HandleFunc("/treeinfo-location-all", t.getTreeInfoLocationAll).Methods("GET")
 	router.HandleFunc("/treeinfobyid", t.getTreeInfoByID).Methods("POST")
 	router.HandleFunc("/genarateqr", t.getQrCode).Methods("POST")
 	fmt.Println("TreeInfo routes registered")
@@ -93,4 +94,15 @@ func (t *TreeInfo) getQrCode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	untils.WriteImage(w, http.StatusOK, data)
+}
+
+func (t *TreeInfo) getTreeInfoLocationAll(w http.ResponseWriter, r *http.Request) {
+	data, err := t.store.GetTreeInfoLocationAll()
+
+	if err != nil {
+		untils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	untils.WriteJson(w, http.StatusOK, data)
 }
