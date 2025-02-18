@@ -51,7 +51,11 @@ La API puede ejecutarse de dos formas:
    ```bash
    go run cmd/main.go
    ```
-
+o
+ ```bash
+go build -o eco-api ./cmd/main.go
+./eco-api
+   ```
 La API se expondrá en el puerto configurado en `API_PORT` (por defecto `8080`).
 
 ---
