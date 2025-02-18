@@ -67,13 +67,13 @@ Si prefieres ejecutar la API en un contenedor Docker, sigue estos pasos:
    ```
 3. Ejecuta el contenedor:
    ```bash
-   docker run -p 5000:5000 eco-api
+   docker run -p 8080:8080 eco-api
    ```
 
 🔹 **Nota**: En la ejecución con Docker, las variables de entorno se establecen en tiempo de ejecución y no se usa el archivo `.env`. Puedes definirlas con `-e` en el comando `docker run`, por ejemplo:
 
 ```bash
-docker run -p 5000:5000 -e PUBLIC_HOST=localhost -e API_PORT=5000 -e DB_USER=root -e DB_PWD=root -e DB_NAME=ecotec -e DB_ADDR=localhost:3306 eco-api
+docker run -p 8080:8080 -e PUBLIC_HOST=localhost -e API_PORT=5000 -e DB_USER=root -e DB_PWD=root -e DB_NAME=ecotec -e DB_ADDR=localhost:3306 eco-api
 ```
 
 ---
